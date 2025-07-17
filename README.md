@@ -1,6 +1,6 @@
-# Fullstack Zikir Uygulaması (Dockerfile Edition)
+# Fullstack Zikir Uygulaması (Dockerfile - Final Edition)
 
-Bu proje, React (Frontend) ve Node.js/Express (Backend) kullanılarak geliştirilmiş, modern ve güvenli bir zikir uygulamasıdır. Proje, **Dockerfile** ile konteynerize edilmiştir. Bu, Koyeb, Heroku, Render gibi modern platformlara dağıtımı son derece kolay, güvenilir ve taşınabilir hale getirir.
+Bu proje, React (Frontend) ve Node.js/Express (Backend) kullanılarak geliştirilmiş, modern ve güvenli bir zikir uygulamasıdır. Proje, **çok aşamalı bir Dockerfile** ile konteynerize edilmiştir. Bu, Koyeb, Heroku, Render gibi modern platformlara dağıtımı son derece kolay, güvenilir, optimize edilmiş ve taşınabilir hale getirir.
 
 ## ✨ Özellikler
 
@@ -22,7 +22,7 @@ Bu proje, React (Frontend) ve Node.js/Express (Backend) kullanılarak geliştiri
 ## ⚙️ Kurulum ve Çalıştırma (Docker ile)
 
 ### Ön Gereksinimler
-- Docker ve Docker Compose'un yüklü olması.
+- Docker'ın yüklü olması.
 - PostgreSQL veritabanı (lokal veya bulut üzerinde).
 
 ### Yapılandırma
@@ -52,18 +52,18 @@ Bu proje, React (Frontend) ve Node.js/Express (Backend) kullanılarak geliştiri
 
 ## 部署 Koyeb'e Deploy Etme (Dockerfile ile)
 
-Bu `Dockerfile` yapısı, Koyeb'e dağıtım için idealdir.
+Bu optimize edilmiş `Dockerfile` yapısı, Koyeb'e dağıtım için idealdir.
 
 1. **Koyeb'de Veritabanı Oluşturma:**
    - Koyeb panelinde yeni bir **Database Service** oluşturun ve bağlantı bilgilerinizi not alın.
 
 2. **Uygulamayı Deploy Etme:**
    - Koyeb'de yeni bir **Web Service** oluşturun ve GitHub reponuzu bağlayın.
-   - **Deployment Method** olarak **Dockerfile**'ı seçin. Koyeb, projenizdeki `Dockerfile`'ı otomatik olarak algılayacaktır.
-   - **Environment Variables** (Ortam Değişkenleri) bölümüne, `.env` dosyanızdaki bilgileri (veritabanı bağlantısı vb.) ekleyin.
+   - **Deployment Method** olarak **Dockerfile**'ı seçin.
+   - **Environment Variables** (Ortam Değişkenleri) bölümüne, `.env` dosyanızdaki bilgileri ekleyin.
    - "Deploy" butonuna tıklayın.
 
-Koyeb, `Dockerfile`'ınızdaki adımları takip ederek projenizi build edecek ve konteyneri başlatacaktır. Bu yöntem, size build ve runtime ortamı üzerinde tam kontrol sağlar ve platformdan kaynaklı hataları ortadan kaldırır.
+Koyeb, `Dockerfile`'ınızdaki adımları takip ederek projenizi build edecek ve konteyneri başlatacaktır. Bu yöntem, size build ve runtime ortamı üzerinde tam kontrol sağlar ve tüm platform kaynaklı hataları ortadan kaldırır.
 
 ### `package-lock.json` Üzerine Not
 Bu repo, dağıtım süreçlerini basitleştirmek için bir `package-lock.json` dosyası içerir. Bu dosya, her zaman tutarlı bağımlılık kurulumları sağlar. Eğer bağımlılıkları güncellerseniz (`npm install <paket_adi>`), `package-lock.json` dosyasını da reponuza commitlediğinizden emin olun.

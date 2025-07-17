@@ -1,13 +1,10 @@
 const express = require('express');
 const router = express.Router();
-const User = require('../models/User');
-
-// Bu rotanın ileride korunması gerekecek (örneğin JWT ile)
-// Şimdilik, kullanıcı kimliğini (ID) istek gövdesinden alıyoruz.
+const sql = require('../config/db');
 
 // @route   POST api/zikir/sync
 // @desc    Sync offline zikir count with the server
-// @access  Private (şimdilik Public)
+// @access  Private (şimdilik Public, kimlik doğrulama gerektirir)
 router.post('/sync', async (req, res) => {
   const { userId, count } = req.body;
 
@@ -15,24 +12,30 @@ router.post('/sync', async (req, res) => {
     return res.status(400).json({ msg: 'Kullanıcı ID ve sayaç gereklidir.' });
   }
 
-  try {
-    const user = await User.findById(userId);
+  const zikirCount = parseInt(count, 10);
+  if (isNaN(zikirCount)) {
+    return res.status(400).json({ msg: 'Geçersiz sayaç değeri.' });
+  }
 
-    if (!user) {
+  try {
+    const updatedUser = await sql`
+      UPDATE users
+      SET total_zikir = total_zikir + ${zikirCount}
+      WHERE id = ${userId}
+      RETURNING total_zikir
+    `;
+
+    if (updatedUser.length === 0) {
       return res.status(404).json({ msg: 'Kullanıcı bulunamadı.' });
     }
 
-    // Gelen sayacı kullanıcının toplam zikrine ekle
-    user.totalZikir += parseInt(count, 10);
-    await user.save();
-
     res.json({
       msg: 'Zikirler başarıyla senkronize edildi.',
-      totalZikir: user.totalZikir
+      totalZikir: updatedUser[0].total_zikir,
     });
 
-  } catch (err) {
-    console.error(err.message);
+  } catch (error) {
+    console.error('Sync error:', error);
     res.status(500).send('Sunucu Hatası');
   }
 });
@@ -42,17 +45,17 @@ router.post('/sync', async (req, res) => {
 // @access  Public
 router.get('/leaderboard', async (req, res) => {
     try {
-        const leaderboard = await User.find()
-            .sort({ totalZikir: -1 }) // En yüksekten düşüğe sırala
-            .limit(100) // İlk 100 kullanıcıyı al
-            .select('username totalZikir'); // Sadece bu alanları gönder
-
+        const leaderboard = await sql`
+            SELECT username, total_zikir
+            FROM users
+            ORDER BY total_zikir DESC
+            LIMIT 100
+        `;
         res.json(leaderboard);
-    } catch (err) {
-        console.error(err.message);
+    } catch (error) {
+        console.error('Leaderboard error:', error);
         res.status(500).send('Sunucu Hatası');
     }
 });
-
 
 module.exports = router;

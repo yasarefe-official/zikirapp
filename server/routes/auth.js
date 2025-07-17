@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const User = require('../models/User');
+const sql = require('../config/db');
 
 // @route   POST api/auth/register
 // @desc    Register a new user
@@ -8,40 +8,32 @@ const User = require('../models/User');
 router.post('/register', async (req, res) => {
   const { username } = req.body;
 
-  // Basit doğrulama
   if (!username) {
     return res.status(400).json({ msg: 'Lütfen bir kullanıcı adı girin.' });
   }
+  // Basit regex ile kullanıcı adını doğrula
+  if (!/^[a-zA-Z0-9_]+$/.test(username)) {
+      return res.status(400).json({ msg: 'Kullanıcı adı sadece harf, rakam ve alt çizgi içerebilir.' });
+  }
 
   try {
-    let user = await User.findOne({ username });
-
-    if (user) {
-      return res.status(400).json({ msg: 'Bu kullanıcı adı zaten alınmış.' });
-    }
-
-    user = new User({
-      username
-    });
-
-    await user.save();
+    const newUser = await sql`
+      INSERT INTO users (username)
+      VALUES (${username})
+      RETURNING id, username, total_zikir
+    `;
 
     res.status(201).json({
       msg: 'Kullanıcı başarıyla oluşturuldu.',
-      user: {
-        id: user.id,
-        username: user.username,
-        totalZikir: user.totalZikir
-      }
+      user: newUser[0]
     });
 
-  } catch (err) {
-    // Schema validation hatasını yakala
-    if (err.name === 'ValidationError') {
-        const messages = Object.values(err.errors).map(val => val.message);
-        return res.status(400).json({ msg: messages.join(' ') });
+  } catch (error) {
+    // PostgreSQL'de unique constraint hatası kodu '23505'
+    if (error.code === '23505') {
+      return res.status(400).json({ msg: 'Bu kullanıcı adı zaten alınmış.' });
     }
-    console.error(err.message);
+    console.error('Register error:', error);
     res.status(500).send('Sunucu Hatası');
   }
 });
@@ -57,27 +49,25 @@ router.post('/login', async (req, res) => {
     }
 
     try {
-        const user = await User.findOne({ username });
+        // Giriş yaparken son giriş zamanını güncelle
+        const users = await sql`
+            UPDATE users
+            SET last_login = CURRENT_TIMESTAMP
+            WHERE username = ${username}
+            RETURNING id, username, total_zikir
+        `;
 
-        if (!user) {
+        if (users.length === 0) {
             return res.status(404).json({ msg: 'Kullanıcı bulunamadı.' });
         }
 
-        // Kullanıcıyı bulduktan sonra son giriş tarihini güncelle
-        user.lastLogin = Date.now();
-        await user.save();
-
         res.json({
             msg: 'Giriş başarılı.',
-            user: {
-                id: user.id,
-                username: user.username,
-                totalZikir: user.totalZikir
-            }
+            user: users[0]
         });
 
-    } catch (err) {
-        console.error(err.message);
+    } catch (error) {
+        console.error('Login error:', error);
         res.status(500).send('Sunucu Hatası');
     }
 });

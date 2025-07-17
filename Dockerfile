@@ -1,46 +1,52 @@
-# ===== Build Stage =====
-# Projeyi build etmek için Node.js'in tam sürümünü kullan
-FROM node:18 AS build
+# ===== Build Stage: Frontend =====
+# Client'ı build etmek için Node.js 20 kullan
+FROM node:20 AS client-builder
 
-# Çalışma dizinini ayarla
-WORKDIR /app
+WORKDIR /app/client
 
-# Önce package.json ve lock dosyasını kopyala
-# Bu, `npm install`'ın sadece bağımlılıklar değiştiğinde çalışmasını sağlar (Docker layer caching)
-COPY package.json ./
-# package-lock.json varsa onu da kopyala (opsiyonel)
-COPY package-lock.json* ./
+# Sadece client'ın package.json'unu kopyala
+COPY client/package.json client/package-lock.json* ./
 
-# Tüm bağımlılıkları kur
+# Client bağımlılıklarını kur
 RUN npm install
 
 # Client kaynak kodunu kopyala
-COPY client/ ./client/
+COPY client/ ./
 
-# React uygulamasını build et
+# Client'ı build et
 RUN npm run build
 
-# ===== Runtime Stage =====
-# Daha küçük ve güvenli bir Node.js imajı kullan
-FROM node:18-alpine
+# ===== Build Stage: Backend =====
+# Backend bağımlılıklarını kurmak için Node.js 20 kullan
+FROM node:20 AS server-builder
 
 WORKDIR /app
 
-# Production bağımlılıklarını build aşamasından kopyala
-COPY --from=build /app/node_modules ./node_modules
+# Ana package.json'u kopyala
+COPY package.json package-lock.json* ./
 
-# Sunucu dosyalarını kopyala
+# Sadece production bağımlılıklarını kur
+RUN npm install --omit=dev
+
+# ===== Runtime Stage =====
+# Son imaj için küçük ve güvenli alpine imajını kullan
+FROM node:20-alpine
+
+WORKDIR /app
+
+# Gerekli sunucu dosyalarını kopyala
 COPY index.js .
 COPY config/ ./config
 COPY routes/ ./routes
 
-# Build edilmiş React uygulamasını kopyala
-COPY --from=build /app/build ./build
+# Backend bağımlılıklarını server-builder'dan kopyala
+COPY --from=server-builder /app/node_modules ./node_modules
+
+# Build edilmiş React uygulamasını client-builder'dan kopyala
+COPY --from=client-builder /app/client/build ./build
 
 # Uygulamanın çalışacağı port'u belirt
 EXPOSE 8080
-
-# Ortam değişkeni (Koyeb gibi platformlar bunu override edebilir)
 ENV PORT=8080
 
 # Uygulamayı başlat

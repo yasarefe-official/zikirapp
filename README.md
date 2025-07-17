@@ -65,6 +65,9 @@ Bu `Dockerfile` yapısı, Koyeb'e dağıtım için idealdir.
 
 Koyeb, `Dockerfile`'ınızdaki adımları takip ederek projenizi build edecek ve konteyneri başlatacaktır. Bu yöntem, size build ve runtime ortamı üzerinde tam kontrol sağlar ve platformdan kaynaklı hataları ortadan kaldırır.
 
+### `package-lock.json` Üzerine Not
+Bu repo, dağıtım süreçlerini basitleştirmek için bir `package-lock.json` dosyası içerir. Bu dosya, her zaman tutarlı bağımlılık kurulumları sağlar. Eğer bağımlılıkları güncellerseniz (`npm install <paket_adi>`), `package-lock.json` dosyasını da reponuza commitlediğinizden emin olun.
+
 ---
 
 Bu README dosyası, projenin son, Dockerize edilmiş yapısını açıklamaktadır. Geliştirme sürecinde emeği geçen herkese teşekkürler!

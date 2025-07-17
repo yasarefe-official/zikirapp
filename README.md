@@ -27,14 +27,17 @@ Bu proje, React (Frontend) ve Node.js/Express (Backend) kullanılarak geliştiri
 - npm
 - PostgreSQL veritabanı
 
-### Kurulum
+### Kurulum ve Build
 1. Projeyi klonlayın: `git clone <repo_url>`
 2. Ana dizine gidin: `cd <proje_dizini>`
-3. Gerekli tüm bağımlılıkları yükleyin:
+3. Tüm bağımlılıkları kurun ve projeyi build edin:
    ```bash
-   npm install
+   npm run build
    ```
-   Bu komut, ana `package.json` dosyasındaki `postinstall` script'ini tetikleyerek hem `server` hem de `client` için gerekli tüm paketleri kurar.
+   Bu komut, ana `package.json` dosyasındaki `build` script'ini çalıştırır. Bu script sırasıyla:
+   1. `server` bağımlılıklarını kurar (`npm install --prefix server`)
+   2. `client` bağımlılıklarını kurar (`npm install --prefix client`)
+   3. `client` uygulamasını build eder (`npm run build --prefix client`)
 
 ### Yapılandırma
 1. `server` dizininde bir `.env` dosyası oluşturun.
@@ -48,10 +51,6 @@ Bu proje, React (Frontend) ve Node.js/Express (Backend) kullanılarak geliştiri
    ```
 
 ### Çalıştırma
-- **Uygulamayı Build Etme (Frontend için):**
-  ```bash
-  npm run build
-  ```
 - **Sunucuyu Başlatma:**
   ```bash
   npm start
@@ -60,7 +59,7 @@ Bu proje, React (Frontend) ve Node.js/Express (Backend) kullanılarak geliştiri
 
 ## 部署 Koyeb'e Deploy Etme
 
-Bu proje, `postinstall` script'i sayesinde Koyeb'in standart build sürecine tam uyumludur.
+Bu proje, birleşik `build` script'i sayesinde Koyeb'in standart build sürecine tam uyumludur.
 
 1. **Koyeb'de Veritabanı Oluşturma:**
    - Koyeb panelinde yeni bir **Database Service** oluşturun.
@@ -79,7 +78,7 @@ Bu proje, `postinstall` script'i sayesinde Koyeb'in standart build sürecine tam
      - `PORT` (genellikle `8080` veya Koyeb'in sağladığı değişken kullanılır)
    - "Deploy" butonuna tıklayın.
 
-Koyeb, build sürecinde önce `npm install` çalıştıracak (bu `postinstall` script'ini tetikler ve tüm bağımlılıklar kurulur), ardından `npm run build` ile client'ı build edecek ve son olarak `npm start` ile sunucuyu başlatacaktır. Bu, "Cannot find module" hatasını çözecektir.
+Koyeb, `build` komutunu çalıştırarak projenizi adım adım kuracak ve "Cannot find module" hatası olmadan sunucuyu başlatacaktır.
 
 ---
 

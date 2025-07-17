@@ -1,10 +1,11 @@
 {
   "name": "zikir-app-mono",
   "version": "1.0.0",
-  "description": "Fullstack Zikir App for Render Deployment",
+  "description": "Fullstack Zikir App for Koyeb Deployment",
   "main": "server/index.js",
   "scripts": {
-    "build": "npm install --prefix client && npm run build --prefix client && npm install --prefix server",
+    "postinstall": "npm install --prefix server && npm install --prefix client",
+    "build": "npm run build --prefix client",
     "start": "node server/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },

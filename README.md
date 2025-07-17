@@ -30,11 +30,11 @@ Bu proje, React (Frontend) ve Node.js/Express (Backend) kullanılarak geliştiri
 ### Kurulum
 1. Projeyi klonlayın: `git clone <repo_url>`
 2. Ana dizine gidin: `cd <proje_dizini>`
-3. Gerekli bağımlılıkları yükleyin:
+3. Gerekli tüm bağımlılıkları yükleyin:
    ```bash
-   npm run build
+   npm install
    ```
-   Bu komut, ana `package.json` dosyasındaki `build` script'i aracılığıyla hem `client` hem de `server` için `npm install` çalıştırır ve `client`'ı build eder.
+   Bu komut, ana `package.json` dosyasındaki `postinstall` script'ini tetikleyerek hem `server` hem de `client` için gerekli tüm paketleri kurar.
 
 ### Yapılandırma
 1. `server` dizininde bir `.env` dosyası oluşturun.
@@ -48,13 +48,19 @@ Bu proje, React (Frontend) ve Node.js/Express (Backend) kullanılarak geliştiri
    ```
 
 ### Çalıştırma
-- **Production Modu (Tek Sunucu):**
-  - Sunucuyu ana dizinden başlatın: `npm start`
-  - Bu komut, `server/index.js` dosyasını çalıştırır ve Express sunucusu build edilmiş React dosyalarını sunar.
+- **Uygulamayı Build Etme (Frontend için):**
+  ```bash
+  npm run build
+  ```
+- **Sunucuyu Başlatma:**
+  ```bash
+  npm start
+  ```
+  Bu komut, `server/index.js` dosyasını çalıştırır ve Express sunucusu build edilmiş React dosyalarını sunar.
 
 ## 部署 Koyeb'e Deploy Etme
 
-Bu proje, Koyeb'in monorepo ve PostgreSQL veritabanı desteği ile kolayca deploy edilebilir.
+Bu proje, `postinstall` script'i sayesinde Koyeb'in standart build sürecine tam uyumludur.
 
 1. **Koyeb'de Veritabanı Oluşturma:**
    - Koyeb panelinde yeni bir **Database Service** oluşturun.
@@ -62,7 +68,7 @@ Bu proje, Koyeb'in monorepo ve PostgreSQL veritabanı desteği ile kolayca deplo
 
 2. **Uygulamayı Deploy Etme:**
    - Koyeb'de yeni bir **Web Service** oluşturun ve GitHub reponuzu bağlayın.
-   - **Build & Run Settings:**
+   - Koyeb, `package.json` dosyasını algılayacak ve build ayarlarını genellikle otomatik olarak doğru şekilde yapılandıracaktır. Kontrol etmeniz gereken ayarlar:
      - **Build Command:** `npm run build`
      - **Run Command:** `npm start`
    - **Environment Variables** (Ortam Değişkenleri) bölümüne, daha önce not aldığınız veritabanı bilgilerini ekleyin:
@@ -73,7 +79,7 @@ Bu proje, Koyeb'in monorepo ve PostgreSQL veritabanı desteği ile kolayca deplo
      - `PORT` (genellikle `8080` veya Koyeb'in sağladığı değişken kullanılır)
    - "Deploy" butonuna tıklayın.
 
-Koyeb, `build` komutunu çalıştırarak projenizi kuracak ve `start` komutu ile sunucuyu başlatacaktır. Sunucu, ilk çalıştırmada veritabanı tablosunu otomatik olarak oluşturacaktır.
+Koyeb, build sürecinde önce `npm install` çalıştıracak (bu `postinstall` script'ini tetikler ve tüm bağımlılıklar kurulur), ardından `npm run build` ile client'ı build edecek ve son olarak `npm start` ile sunucuyu başlatacaktır. Bu, "Cannot find module" hatasını çözecektir.
 
 ---
 

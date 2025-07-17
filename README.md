@@ -1,4 +1,4 @@
-# Fullstack Zikir Uygulaması (Dockerfile - Final Edition)
+# Fullstack Zikir Uygulaması (Dockerfile - Nihai Sürüm)
 
 Bu proje, React (Frontend) ve Node.js/Express (Backend) kullanılarak geliştirilmiş, modern ve güvenli bir zikir uygulamasıdır. Proje, **çok aşamalı bir Dockerfile** ile konteynerize edilmiştir. Bu, Koyeb, Heroku, Render gibi modern platformlara dağıtımı son derece kolay, güvenilir, optimize edilmiş ve taşınabilir hale getirir.
 
@@ -8,7 +8,7 @@ Bu proje, React (Frontend) ve Node.js/Express (Backend) kullanılarak geliştiri
 - **Zikir Sayacı:** Animasyonlu, offline modda tam destekli sayaç.
 - **Offline-Online Senkronizasyon:** İnternet yokken yapılan zikirler, bağlantı kurulduğunda otomatik olarak sunucuyla senkronize edilir.
 - **Global Leaderboard:** Kullanıcıların en yüksek skorlarını gösteren canlı liderlik tablosu.
-- **Paylaşılabilir İstatistik Linkleri:** Kullanıcılar, istatistiklerini tamamen client-side oluşturulan güvenli bir link ile paylaşabilir.
+- **Paylaşılabilir İstatistik Linkleri:** Kullanıcılar, istatistiklerini tamamen client-side oluşturulan güvenli bir link ile paylaşebilir.
 - **Kullanıcı Profili:** Toplam zikir ve diğer istatistikler.
 - **Otomatik Veritabanı Migration:** Uygulama ilk çalıştığında gerekli veritabanı tablosunu kendi oluşturur.
 

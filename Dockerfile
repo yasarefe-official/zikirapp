@@ -1,32 +1,24 @@
-# ===== Build Stage: Frontend =====
-# Client'ı build etmek için Node.js 20 kullan
-FROM node:20 AS client-builder
-
-WORKDIR /app/client
-
-# Sadece client'ın package.json'unu kopyala
-COPY client/package.json client/package-lock.json* ./
-
-# Client bağımlılıklarını kur
-RUN npm install
-
-# Client kaynak kodunu kopyala
-COPY client/ ./
-
-# Client'ı build et
-RUN npm run build
-
-# ===== Build Stage: Backend =====
-# Backend bağımlılıklarını kurmak için Node.js 20 kullan
-FROM node:20 AS server-builder
+# ===== Build Stage =====
+# Projeyi build etmek için Node.js 20 kullan
+FROM node:20 AS builder
 
 WORKDIR /app
 
-# Ana package.json'u kopyala
+# package.json ve lock dosyasını kopyala
 COPY package.json package-lock.json* ./
 
-# Sadece production bağımlılıklarını kur
-RUN npm install --omit=dev
+# Tüm (client ve server) bağımlılıkları kur
+RUN npm install
+
+# Client kaynak kodunu kopyala
+COPY client/ ./client
+
+# Sunucu kaynak kodunu kopyala
+COPY . .
+
+# Client'ı build et
+# Bu komut, ana dizinde bir `build` klasörü oluşturur
+RUN npm run build
 
 # ===== Runtime Stage =====
 # Son imaj için küçük ve güvenli alpine imajını kullan
@@ -34,16 +26,18 @@ FROM node:20-alpine
 
 WORKDIR /app
 
+# Production bağımlılıklarını builder aşamasından kopyala
+# Not: npm install'ı --omit=dev ile çalıştırmak daha da optimize edebilir,
+# ama bu yapı daha basit ve garantilidir.
+COPY --from=builder /app/node_modules ./node_modules
+
 # Gerekli sunucu dosyalarını kopyala
-COPY index.js .
-COPY config/ ./config
-COPY routes/ ./routes
+COPY --from=builder /app/index.js .
+COPY --from=builder /app/config/ ./config
+COPY --from=builder /app/routes/ ./routes
 
-# Backend bağımlılıklarını server-builder'dan kopyala
-COPY --from=server-builder /app/node_modules ./node_modules
-
-# Build edilmiş React uygulamasını client-builder'dan kopyala
-COPY --from=client-builder /app/client/build ./build
+# Build edilmiş React uygulamasını kopyala
+COPY --from=builder /app/build ./build
 
 # Uygulamanın çalışacağı port'u belirt
 EXPOSE 8080

@@ -1,6 +1,6 @@
-# Fullstack Zikir Uygulaması (Birleşik Yapı)
+# Fullstack Zikir Uygulaması (Dockerfile Edition)
 
-Bu proje, React (Frontend) ve Node.js/Express (Backend) kullanılarak geliştirilmiş, modern ve güvenli bir zikir uygulamasıdır. Proje, **tek bir `package.json`** ile yönetilen standart bir yapıya sahiptir. Bu, Koyeb, Heroku, Render gibi modern platformlara dağıtımı son derece kolaylaştırır.
+Bu proje, React (Frontend) ve Node.js/Express (Backend) kullanılarak geliştirilmiş, modern ve güvenli bir zikir uygulamasıdır. Proje, **Dockerfile** ile konteynerize edilmiştir. Bu, Koyeb, Heroku, Render gibi modern platformlara dağıtımı son derece kolay, güvenilir ve taşınabilir hale getirir.
 
 ## ✨ Özellikler
 
@@ -17,26 +17,13 @@ Bu proje, React (Frontend) ve Node.js/Express (Backend) kullanılarak geliştiri
 - **Frontend:** React, TailwindCSS, React Router, Axios
 - **Backend:** Node.js, Express, Postgres.js
 - **Veritabanı:** PostgreSQL
-- **Deployment:** Koyeb, Heroku, Render vb.
+- **Deployment:** **Docker**
 
-## ⚙️ Kurulum ve Çalıştırma
+## ⚙️ Kurulum ve Çalıştırma (Docker ile)
 
 ### Ön Gereksinimler
-- Node.js (v18.x veya üstü)
-- npm
-- PostgreSQL veritabanı
-
-### Kurulum ve Build
-1. Projeyi klonlayın: `git clone <repo_url>`
-2. Ana dizine gidin: `cd <proje_dizini>`
-3. Tüm bağımlılıkları kurun:
-   ```bash
-   npm install
-   ```
-4. Projeyi build edin (Bu, `client` klasöründeki React uygulamasını derleyip ana dizinde bir `build` klasörü oluşturur):
-   ```bash
-   npm run build
-   ```
+- Docker ve Docker Compose'un yüklü olması.
+- PostgreSQL veritabanı (lokal veya bulut üzerinde).
 
 ### Yapılandırma
 1. Projenin ana dizininde bir `.env` dosyası oluşturun.
@@ -46,33 +33,38 @@ Bu proje, React (Frontend) ve Node.js/Express (Backend) kullanılarak geliştiri
    DATABASE_NAME=<your_db_name>
    DATABASE_USER=<your_user>
    DATABASE_PASSWORD=<your_password>
-   PORT=3001
+   PORT=8080
    ```
+   *Not: `DATABASE_HOST` için, eğer Docker host makinenizdeki bir veritabanına bağlanıyorsanız, `host.docker.internal` gibi özel bir adres kullanmanız gerekebilir.*
 
 ### Çalıştırma
-- Sunucuyu başlatın:
-  ```bash
-  npm start
-  ```
-  Bu komut, `index.js` dosyasını çalıştırır. Express sunucusu, `build` klasöründeki statik React dosyalarını sunar.
+1. Projeyi klonlayın: `git clone <repo_url>`
+2. Ana dizine gidin: `cd <proje_dizini>`
+3. Docker imajını build edin:
+   ```bash
+   docker build -t zikir-app .
+   ```
+4. Konteyneri çalıştırın:
+   ```bash
+   docker run -p 8080:8080 --env-file .env zikir-app
+   ```
+   Uygulama artık `http://localhost:8080` adresinde çalışıyor olacaktır.
 
-## 部署 Koyeb'e Deploy Etme
+## 部署 Koyeb'e Deploy Etme (Dockerfile ile)
 
-Bu birleşik yapı, Koyeb'e dağıtım için idealdir.
+Bu `Dockerfile` yapısı, Koyeb'e dağıtım için idealdir.
 
 1. **Koyeb'de Veritabanı Oluşturma:**
    - Koyeb panelinde yeni bir **Database Service** oluşturun ve bağlantı bilgilerinizi not alın.
 
 2. **Uygulamayı Deploy Etme:**
    - Koyeb'de yeni bir **Web Service** oluşturun ve GitHub reponuzu bağlayın.
-   - Koyeb, `package.json` dosyasını algılayacak ve build ayarlarını doğru şekilde yapılandıracaktır.
-     - **Build Command:** `npm run build`
-     - **Run Command:** `npm start`
-   - **Environment Variables** (Ortam Değişkenleri) bölümüne, `.env` dosyanızdaki bilgileri ekleyin.
+   - **Deployment Method** olarak **Dockerfile**'ı seçin. Koyeb, projenizdeki `Dockerfile`'ı otomatik olarak algılayacaktır.
+   - **Environment Variables** (Ortam Değişkenleri) bölümüne, `.env` dosyanızdaki bilgileri (veritabanı bağlantısı vb.) ekleyin.
    - "Deploy" butonuna tıklayın.
 
-Koyeb, standart süreci takip edecektir: `npm install` ile tüm bağımlılıkları kuracak, `npm run build` ile React uygulamasını derleyecek ve son olarak `npm start` ile sunucuyu başlatacaktır. Bu yapı, "Cannot find module" gibi hataları tamamen ortadan kaldırır.
+Koyeb, `Dockerfile`'ınızdaki adımları takip ederek projenizi build edecek ve konteyneri başlatacaktır. Bu yöntem, size build ve runtime ortamı üzerinde tam kontrol sağlar ve platformdan kaynaklı hataları ortadan kaldırır.
 
 ---
 
-Bu README dosyası, projenin son, birleşik yapısını açıklamaktadır. Geliştirme sürecinde emeği geçen herkese teşekkürler!
+Bu README dosyası, projenin son, Dockerize edilmiş yapısını açıklamaktadır. Geliştirme sürecinde emeği geçen herkese teşekkürler!

@@ -23,13 +23,12 @@ app.get('/api/test', (req, res) => {
 });
 
 // Serve Frontend
-// React uygulamasının build klasörünün yolunu belirliyoruz.
-const buildPath = path.join(__dirname, '../client/build');
-app.use(express.static(buildPath));
+// React uygulamasının build edilmiş dosyalarını sun.
+app.use(express.static(path.join(__dirname, 'build')));
 
-// Diğer tüm GET istekleri için React uygulamasını gönder.
+// API rotaları dışındaki tüm istekler için React uygulamasını gönder.
 app.get('*', (req, res) => {
-  res.sendFile(path.join(buildPath, 'index.html'));
+  res.sendFile(path.join(__dirname, 'build', 'index.html'));
 });
 
 const startServer = async () => {

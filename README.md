@@ -1,6 +1,6 @@
-# Fullstack Zikir Uygulaması (PostgreSQL & Koyeb Edition)
+# Fullstack Zikir Uygulaması (Birleşik Yapı)
 
-Bu proje, React (Frontend) ve Node.js/Express (Backend) kullanılarak geliştirilmiş, modern, hızlı ve güvenli bir zikir uygulamasıdır. Koyeb üzerinde, PostgreSQL veritabanı ile tam otomatik olarak deploy edilmek üzere tasarlanmıştır.
+Bu proje, React (Frontend) ve Node.js/Express (Backend) kullanılarak geliştirilmiş, modern ve güvenli bir zikir uygulamasıdır. Proje, **tek bir `package.json`** ile yönetilen standart bir yapıya sahiptir. Bu, Koyeb, Heroku, Render gibi modern platformlara dağıtımı son derece kolaylaştırır.
 
 ## ✨ Özellikler
 
@@ -10,15 +10,14 @@ Bu proje, React (Frontend) ve Node.js/Express (Backend) kullanılarak geliştiri
 - **Global Leaderboard:** Kullanıcıların en yüksek skorlarını gösteren canlı liderlik tablosu.
 - **Paylaşılabilir İstatistik Linkleri:** Kullanıcılar, istatistiklerini tamamen client-side oluşturulan güvenli bir link ile paylaşabilir.
 - **Kullanıcı Profili:** Toplam zikir ve diğer istatistikler.
-- **Güvenlik:** API'lerde temel input validation ve CORS önlemleri.
 - **Otomatik Veritabanı Migration:** Uygulama ilk çalıştığında gerekli veritabanı tablosunu kendi oluşturur.
 
 ## 🚀 Teknoloji Yığını
 
 - **Frontend:** React, TailwindCSS, React Router, Axios
-- **Backend:** Node.js, Express, **Postgres.js**
-- **Veritabanı:** **PostgreSQL**
-- **Deployment:** **Koyeb**
+- **Backend:** Node.js, Express, Postgres.js
+- **Veritabanı:** PostgreSQL
+- **Deployment:** Koyeb, Heroku, Render vb.
 
 ## ⚙️ Kurulum ve Çalıştırma
 
@@ -30,17 +29,17 @@ Bu proje, React (Frontend) ve Node.js/Express (Backend) kullanılarak geliştiri
 ### Kurulum ve Build
 1. Projeyi klonlayın: `git clone <repo_url>`
 2. Ana dizine gidin: `cd <proje_dizini>`
-3. Tüm bağımlılıkları kurun ve projeyi build edin:
+3. Tüm bağımlılıkları kurun:
+   ```bash
+   npm install
+   ```
+4. Projeyi build edin (Bu, `client` klasöründeki React uygulamasını derleyip ana dizinde bir `build` klasörü oluşturur):
    ```bash
    npm run build
    ```
-   Bu komut, ana `package.json` dosyasındaki `build` script'ini çalıştırır. Bu script sırasıyla:
-   1. `server` bağımlılıklarını kurar (`npm install --prefix server`)
-   2. `client` bağımlılıklarını kurar (`npm install --prefix client`)
-   3. `client` uygulamasını build eder (`npm run build --prefix client`)
 
 ### Yapılandırma
-1. `server` dizininde bir `.env` dosyası oluşturun.
+1. Projenin ana dizininde bir `.env` dosyası oluşturun.
 2. İçine PostgreSQL veritabanı bilgilerinizi ekleyin:
    ```
    DATABASE_HOST=<your_host>
@@ -51,35 +50,29 @@ Bu proje, React (Frontend) ve Node.js/Express (Backend) kullanılarak geliştiri
    ```
 
 ### Çalıştırma
-- **Sunucuyu Başlatma:**
+- Sunucuyu başlatın:
   ```bash
   npm start
   ```
-  Bu komut, `server/index.js` dosyasını çalıştırır ve Express sunucusu build edilmiş React dosyalarını sunar.
+  Bu komut, `index.js` dosyasını çalıştırır. Express sunucusu, `build` klasöründeki statik React dosyalarını sunar.
 
 ## 部署 Koyeb'e Deploy Etme
 
-Bu proje, birleşik `build` script'i sayesinde Koyeb'in standart build sürecine tam uyumludur.
+Bu birleşik yapı, Koyeb'e dağıtım için idealdir.
 
 1. **Koyeb'de Veritabanı Oluşturma:**
-   - Koyeb panelinde yeni bir **Database Service** oluşturun.
-   - Veritabanı bilgilerinizi (host, db name, user, password) bir yere not alın.
+   - Koyeb panelinde yeni bir **Database Service** oluşturun ve bağlantı bilgilerinizi not alın.
 
 2. **Uygulamayı Deploy Etme:**
    - Koyeb'de yeni bir **Web Service** oluşturun ve GitHub reponuzu bağlayın.
-   - Koyeb, `package.json` dosyasını algılayacak ve build ayarlarını genellikle otomatik olarak doğru şekilde yapılandıracaktır. Kontrol etmeniz gereken ayarlar:
+   - Koyeb, `package.json` dosyasını algılayacak ve build ayarlarını doğru şekilde yapılandıracaktır.
      - **Build Command:** `npm run build`
      - **Run Command:** `npm start`
-   - **Environment Variables** (Ortam Değişkenleri) bölümüne, daha önce not aldığınız veritabanı bilgilerini ekleyin:
-     - `DATABASE_HOST`
-     - `DATABASE_NAME`
-     - `DATABASE_USER`
-     - `DATABASE_PASSWORD`
-     - `PORT` (genellikle `8080` veya Koyeb'in sağladığı değişken kullanılır)
+   - **Environment Variables** (Ortam Değişkenleri) bölümüne, `.env` dosyanızdaki bilgileri ekleyin.
    - "Deploy" butonuna tıklayın.
 
-Koyeb, `build` komutunu çalıştırarak projenizi adım adım kuracak ve "Cannot find module" hatası olmadan sunucuyu başlatacaktır.
+Koyeb, standart süreci takip edecektir: `npm install` ile tüm bağımlılıkları kuracak, `npm run build` ile React uygulamasını derleyecek ve son olarak `npm start` ile sunucuyu başlatacaktır. Bu yapı, "Cannot find module" gibi hataları tamamen ortadan kaldırır.
 
 ---
 
-Bu README dosyası, projenin PostgreSQL'e uyarlanmış son halini açıklamaktadır. Geliştirme sürecinde emeği geçen herkese teşekkürler!
+Bu README dosyası, projenin son, birleşik yapısını açıklamaktadır. Geliştirme sürecinde emeği geçen herkese teşekkürler!

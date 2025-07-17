@@ -60,6 +60,9 @@ Bu optimize edilmiş `Dockerfile` ve PNPM yapısı, Koyeb'e dağıtım için ide
 
 Koyeb, `Dockerfile`'ınızdaki adımları takip ederek projenizi build edecek ve konteyneri başlatacaktır. Bu yöntem, size build ve runtime ortamı üzerinde tam kontrol sağlar ve tüm platform kaynaklı hataları ortadan kaldırır.
 
+### `pnpm-lock.yaml` Üzerine Not
+Bu repo, dağıtım süreçlerini basitleştirmek ve tutarlı kurulumlar sağlamak için bir `pnpm-lock.yaml` dosyası içerir. Eğer bağımlılıkları güncellerseniz (`pnpm install <paket_adi>`), `pnpm-lock.yaml` dosyasını da reponuza commitlediğinizden emin olun.
+
 ---
 
 Bu README dosyası, projenin son, PNPM ve Docker tabanlı yapısını açıklamaktadır. Geliştirme sürecinde emeği geçen herkese teşekkürler!

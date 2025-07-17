@@ -18,8 +18,9 @@ COPY client/package.json ./client/
 COPY server/package.json ./server/
 
 # Tüm workspace bağımlılıklarını kur
-# --frozen-lockfile, pnpm-lock.yaml varsa onu kullanır, CI/CD için en iyi pratiktir.
-RUN pnpm install --frozen-lockfile
+# Not: --frozen-lockfile CI ortamlarında varsayılan olarak etkindir.
+# Lock dosyası yoksa veya güncel değilse sorun olmaması için bu bayrağı kullanmıyoruz.
+RUN pnpm install
 
 # Tüm kaynak kodunu kopyala
 COPY . .

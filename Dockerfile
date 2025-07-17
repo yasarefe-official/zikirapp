@@ -8,8 +8,8 @@ WORKDIR /app
 # Önce package.json ve lock dosyasını kopyala
 # Bu, `npm install`'ın sadece bağımlılıklar değiştiğinde çalışmasını sağlar (Docker layer caching)
 COPY package.json ./
-# package-lock.json dosyasını da kopyalamaya çalış, varsa kullanır
-COPY package-lock.json ./
+# package-lock.json varsa onu da kopyala (opsiyonel)
+COPY package-lock.json* ./
 
 # Tüm bağımlılıkları kur
 RUN npm install

@@ -23,12 +23,12 @@ app.get('/api/test', (req, res) => {
 });
 
 // Serve Frontend
-// React uygulamasının build edilmiş dosyalarını sun.
-app.use(express.static(path.join(__dirname, 'build')));
+// Projenin kök dizinindeki statik dosyaları sun (örn: index.html)
+app.use(express.static(path.join(__dirname, '..')));
 
-// API rotaları dışındaki tüm istekler için React uygulamasını gönder.
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'build', 'index.html'));
+// API rotaları dışındaki tüm istekler için index.html dosyasını gönder.
+app.get(/^(?!\/api).*/, (req, res) => {
+  res.sendFile(path.join(__dirname, '..', 'index.html'));
 });
 
 const startServer = async () => {

@@ -1,22 +1,21 @@
-# Sunucu için Node.js 20-alpine imajını kullan
-FROM node:20-alpine
-
+# Stage 1: Build a slim production-ready server
+FROM node:20-alpine AS base
 WORKDIR /app
 
-# Sadece sunucu bağımlılıklarını kur
+# Copy server package.json and install dependencies
 COPY server/package.json ./server/
 RUN cd server && npm install --production
 
-# Sunucu kodunu kopyala
+# Copy the rest of the server code
 COPY server/ ./server/
 
-# Statik HTML dosyasını kopyala
-COPY index.html ./
+# Copy the static client files
+COPY client/ ./client/
 
-# Uygulamanın çalışacağı port'u belirt
+# Expose the port the app runs on
 EXPOSE 8080
 ENV PORT=8080
 ENV NODE_ENV=production
 
-# Uygulamayı başlat
+# Start the server
 CMD ["node", "server/index.js"]

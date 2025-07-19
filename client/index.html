@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="tr" class="h-full bg-gray-900">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zikirmatik</title>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="h-full flex flex-col items-center justify-between p-4 bg-gray-900 text-white font-sans">
+
+    <!-- Login Modal -->
+    <div id="login-modal" class="fixed inset-0 bg-gray-900 bg-opacity-80 flex items-center justify-center z-50">
+        <div class="bg-gray-800 p-8 rounded-lg shadow-xl text-center">
+            <h2 class="text-2xl font-bold mb-4">Giriş Yap</h2>
+            <p class="text-gray-400 mb-6">Liderlik tablosu için bir kullanıcı adı girin.</p>
+            <input type="text" id="username-input" placeholder="Kullanıcı Adı" class="w-full bg-gray-700 text-white px-4 py-2 rounded mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <button id="login-btn" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Giriş</button>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header class="w-full max-w-sm flex justify-between items-center">
+        <h1 class="text-2xl font-bold text-blue-300">Zikirmatik</h1>
+        <div id="user-profile" class="hidden items-center">
+            <span id="username-display" class="mr-2 text-gray-300"></span>
+            <span class="material-symbols-outlined">account_circle</span>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex flex-col items-center justify-center flex-grow w-full">
+        <!-- Zikir Counter -->
+        <div id="counter-container" class="flex flex-col items-center justify-center flex-grow">
+            <div id="counter-display" class="relative flex items-center justify-center w-48 h-48 sm:w-56 sm:h-56 bg-gray-800 rounded-full border-4 border-blue-500 transition-all duration-300 counter-glow mb-8">
+                <span id="count" class="text-6xl sm:text-7xl font-bold z-10">0</span>
+            </div>
+            <button id="increment-btn" class="w-full max-w-xs px-8 py-4 bg-blue-600 text-white font-bold rounded-full text-2xl transform transition-transform duration-150 active:scale-95 btn-glow">
+                Zikir Çek
+            </button>
+        </div>
+
+        <!-- Leaderboard -->
+        <div id="leaderboard-container" class="hidden w-full max-w-md bg-gray-800 rounded-lg p-4 mt-8">
+            <h2 class="text-xl font-bold text-center mb-4">Liderlik Tablosu</h2>
+            <ul id="leaderboard-list" class="space-y-2">
+                <!-- Leaderboard items will be injected here -->
+            </ul>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="w-full max-w-sm flex justify-around items-center">
+        <button id="reset-btn" title="Sayacı Sıfırla" class="p-3 rounded-full hover:bg-gray-700 transition-colors">
+            <span class="material-symbols-outlined">refresh</span>
+        </button>
+        <button id="leaderboard-toggle" title="Liderlik Tablosu" class="p-3 rounded-full hover:bg-gray-700 transition-colors">
+            <span class="material-symbols-outlined">leaderboard</span>
+        </button>
+        <button id="sync-btn" title="Sunucuyla Eşitle" class="p-3 rounded-full hover:bg-gray-700 transition-colors">
+            <span class="material-symbols-outlined">sync</span>
+        </button>
+    </footer>
+
+    <script src="app.js"></script>
+
+</body>
+</html>

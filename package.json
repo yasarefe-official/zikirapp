@@ -1,9 +1,13 @@
 {
-  "name": "zikir-app",
+  "name": "zikirmatik-fullstack",
   "version": "1.0.0",
-  "description": "Zikir App",
+  "description": "Fullstack Zikirmatik application",
+  "main": "server/index.js",
   "scripts": {
-    "start": "node server/index.js"
+    "start": "node server/index.js",
+    "server": "node server/index.js",
+    "client": "echo 'Client is served statically by the server. Run npm start.'",
+    "install-server": "npm install --prefix server"
   },
   "engines": {
     "node": "20.x"

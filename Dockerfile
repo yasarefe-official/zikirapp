@@ -1,55 +1,17 @@
-# ===== Base Stage =====
-# PNPM'i kurmak için Node.js 20 kullan
-FROM node:20 AS base
-RUN npm install -g pnpm
-
-# ===== Build Stage =====
-# Bağımlılıkları kurmak ve build etmek için base imajını kullan
-FROM base AS builder
-
-WORKDIR /app
-
-# Workspace tanım dosyasını kopyala
-COPY pnpm-workspace.yaml .
-
-# Her iki package.json'u da kopyala
-COPY package.json .
-COPY client/package.json ./client/
-COPY server/package.json ./server/
-
-# Tüm workspace bağımlılıklarını kur
-# Not: --frozen-lockfile CI ortamlarında varsayılan olarak etkindir.
-# Lock dosyası yoksa veya güncel değilse sorun olmaması için bu bayrağı kullanmıyoruz.
-RUN pnpm install
-
-# Tüm kaynak kodunu kopyala
-COPY . .
-
-# Sadece client'ı build et
-RUN pnpm --filter client build
-
-# ===== Prune Stage =====
-# Sadece production bağımlılıklarını ayıklamak için bir ara katman
-FROM base AS pruner
-
-WORKDIR /app
-
-COPY --from=builder /app .
-RUN pnpm -r deploy --prod /prod/
-
-# ===== Runtime Stage =====
-# Son imaj için küçük ve güvenli alpine imajını kullan
+# Sunucu için Node.js 20-alpine imajını kullan
 FROM node:20-alpine
 
 WORKDIR /app
 
-# Production bağımlılıklarını ve sunucu dosyalarını kopyala
-COPY --from=pruner /prod/server/ ./server
-COPY --from=pruner /prod/node_modules/ ./node_modules
-COPY --from=pruner /prod/package.json .
+# Sadece sunucu bağımlılıklarını kur
+COPY server/package.json ./server/
+RUN cd server && npm install --production
 
-# Build edilmiş React uygulamasını kopyala
-COPY --from=builder /app/client/build ./client/build
+# Sunucu kodunu kopyala
+COPY server/ ./server/
+
+# Statik HTML dosyasını kopyala
+COPY index.html ./
 
 # Uygulamanın çalışacağı port'u belirt
 EXPOSE 8080

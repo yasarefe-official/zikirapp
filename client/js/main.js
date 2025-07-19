@@ -102,13 +102,30 @@ function handleZikirSelect(zikir) {
 }
 
 function handleGoalSelect(event) {
+    // Ensure a zikir is selected first
+    if (!state.currentZikir) {
+        alert("Lütfen önce bir zikir seçin.");
+        return;
+    }
+
+    // Check if the clicked element is a button
+    if (event.target.tagName !== 'BUTTON') return;
+
     const goal = parseInt(event.target.dataset.goal, 10);
     if (isNaN(goal)) return;
-    state.currentGoal = goal;
-    ui.updateZikirDisplay(state.currentZikir?.name || 'Genel Sayım', goal);
-    // Highlight selected button
-    document.querySelectorAll('.goal-btn').forEach(btn => btn.classList.remove('bg-blue-600'));
-    event.target.classList.add('bg-blue-600');
+
+    // Toggle goal off if the same button is clicked again
+    if (state.currentGoal === goal) {
+        state.currentGoal = 0;
+        event.target.classList.remove('bg-blue-600');
+    } else {
+        state.currentGoal = goal;
+        // Highlight selected button
+        document.querySelectorAll('.goal-btn').forEach(btn => btn.classList.remove('bg-blue-600'));
+        event.target.classList.add('bg-blue-600');
+    }
+
+    ui.updateZikirDisplay(state.currentZikir.name, state.currentGoal);
 }
 
 

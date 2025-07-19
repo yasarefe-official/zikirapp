@@ -29,6 +29,7 @@ const initDb = async () => {
       count INT NOT NULL,
       date DATE NOT NULL DEFAULT CURRENT_DATE
     );`,
+    `CREATE UNIQUE INDEX IF NOT EXISTS zikirler_name_idx ON zikirler (name);`,
     `INSERT INTO zikirler (name, description) VALUES
       ('Sübhanallah', 'Allah eksik sıfatlardan uzaktır.'),
       ('Elhamdülillah', 'Hamd, Allah''adır.'),

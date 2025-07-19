@@ -1,15 +1,11 @@
 {
-  "name": "zikir-app-monorepo",
+  "name": "zikir-app",
   "version": "1.0.0",
-  "private": true,
-  "description": "Zikir App Monorepo with PNPM",
+  "description": "Zikir App",
   "scripts": {
-    "dev": "pnpm --filter client start",
-    "start": "pnpm --filter server start",
-    "build": "pnpm --filter client build"
+    "start": "node server/index.js"
   },
   "engines": {
-    "node": "20.x",
-    "pnpm": ">=8"
+    "node": "20.x"
   }
 }

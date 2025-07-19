@@ -15,7 +15,7 @@ Bu proje, React (Frontend) ve Node.js/Express (Backend) kullanılarak geliştiri
 ## 🚀 Teknoloji Yığını
 
 - **Paket Yöneticisi:** **PNPM**
-- **Frontend:** React, TailwindCSS, React Router, Axios
+- **Frontend:** React, TailwindCSS, PostCSS, React Router, Axios
 - **Backend:** Node.js, Express, Postgres.js
 - **Veritabanı:** PostgreSQL
 - **Deployment:** **Docker**

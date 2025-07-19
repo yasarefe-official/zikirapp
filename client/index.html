@@ -20,9 +20,26 @@
         </div>
     </div>
 
+    <!-- Zikir Seçim Modalı -->
+    <div id="zikir-modal" class="hidden fixed inset-0 bg-gray-900 bg-opacity-80 flex items-center justify-center z-40">
+        <div class="bg-gray-800 p-8 rounded-lg shadow-xl w-full max-w-sm">
+            <h2 class="text-2xl font-bold mb-6 text-center">Zikir Seç</h2>
+            <ul id="zikir-list" class="space-y-2 max-h-64 overflow-y-auto">
+                <!-- Zikirler buraya eklenecek -->
+            </ul>
+            <button id="close-zikir-modal" class="mt-6 w-full bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">Kapat</button>
+        </div>
+    </div>
+
     <!-- Header -->
     <header class="w-full max-w-sm flex justify-between items-center">
-        <h1 class="text-2xl font-bold text-blue-300">Zikirmatik</h1>
+        <button id="change-zikir-btn" class="flex items-center text-left">
+            <div>
+                <h1 id="current-zikir-name" class="text-2xl font-bold text-blue-300">Genel Sayım</h1>
+                <p id="current-zikir-goal" class="text-xs text-gray-400">Hedef: Yok</p>
+            </div>
+            <span class="material-symbols-outlined ml-2">expand_more</span>
+        </button>
         <div id="user-profile" class="hidden items-center">
             <span id="username-display" class="mr-2 text-gray-300"></span>
             <span class="material-symbols-outlined">account_circle</span>
@@ -35,6 +52,12 @@
         <div id="counter-container" class="flex flex-col items-center justify-center flex-grow">
             <div id="counter-display" class="relative flex items-center justify-center w-48 h-48 sm:w-56 sm:h-56 bg-gray-800 rounded-full border-4 border-blue-500 transition-all duration-300 counter-glow mb-8">
                 <span id="count" class="text-6xl sm:text-7xl font-bold z-10">0</span>
+            </div>
+            <div id="goal-buttons" class="flex space-x-2 mb-4">
+                <button data-goal="33" class="goal-btn bg-gray-700 hover:bg-gray-600 px-4 py-1 rounded-full">33</button>
+                <button data-goal="99" class="goal-btn bg-gray-700 hover:bg-gray-600 px-4 py-1 rounded-full">99</button>
+                <button data-goal="100" class="goal-btn bg-gray-700 hover:bg-gray-600 px-4 py-1 rounded-full">100</button>
+                <button data-goal="1000" class="goal-btn bg-gray-700 hover:bg-gray-600 px-4 py-1 rounded-full">1000</button>
             </div>
             <button id="increment-btn" class="w-full max-w-xs px-8 py-4 bg-blue-600 text-white font-bold rounded-full text-2xl transform transition-transform duration-150 active:scale-95 btn-glow">
                 Zikir Çek
@@ -63,7 +86,7 @@
         </button>
     </footer>
 
-    <script src="app.js"></script>
+    <script type="module" src="js/main.js"></script>
 
 </body>
 </html>
